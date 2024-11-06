@@ -1,0 +1,5 @@
+__pycache__
+.venv
+PythonProject/__pycache__
+PythonProject/files/credentials.json
+job-listing-app/node_modules
