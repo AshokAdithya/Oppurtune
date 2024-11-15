@@ -1,8 +1,18 @@
 import asyncio
 from utils import update_date
 from job_role_predictor import JobRolePredictor
+from abc import ABC, abstractmethod
 
-class JobFactory:
+class createFactory(ABC):
+    @abstractmethod
+    def create_job(self,get_job):
+        pass
+
+    @abstractmethod()
+    def get_company_logo(self,company_logo):
+        pass
+
+class JobFactory(createFactory):
     def __init__(self, linkedin_adapter):
         self.job_role_predictor = JobRolePredictor()
         self.linkedin_adapter = linkedin_adapter
