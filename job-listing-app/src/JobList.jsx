@@ -16,6 +16,7 @@ import {
 import "./JobList.css";
 import { login, logout } from "./store/authSlice";
 import UserImage from "./assets/user.png";
+import CloseImage from "./assets/close.png";
 
 const fetchJobs = async (page, search, appliedFilters) => {
   const response = await axios.get(
@@ -39,9 +40,10 @@ const fetchJobDetails = async (postId, user) => {
 };
 
 const refetchJobs = () => {
-  const newJobData = fetchJobs(page, search, appliedFilters);
-  dispatch(setJobs(newJobData.jobs));
-  dispatch(setTotalPages(newJobData.total_pages));
+  // const newJobData = fetchJobs(page, search, appliedFilters);
+  // dispatch(setJobs(newJobData.jobs));
+  // dispatch(setTotalPages(newJobData.total_pages));
+  refetch();
 };
 
 const saveJobPost = async (postId, username) => {
@@ -197,6 +199,12 @@ const JobList = () => {
     }
   };
 
+  const clearSearch = () => {
+    setSearchInput("");
+    dispatch(setSearch(""));
+    dispatch(setPage(1));
+  };
+
   if (!isAuthenticated) {
     Navigate("/login");
   }
@@ -216,30 +224,48 @@ const JobList = () => {
         <div className="full-header">
           <div className="header-section">
             <h1>Opportune</h1>
-            <div className="search-bar-container">
-              <input
-                className="search-bar"
-                type="text"
-                value={searchInput}
-                onChange={handleSearchChange}
-                onKeyDown={handleKeyDown}
-              />
-              <button className="search-button" onClick={handleSearchSubmit}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  height="30px"
-                  viewBox="0 -960 960 960"
+            <div style={{ display: "flex", flexDirection: "row" }}>
+              <div className="search-bar-container">
+                <input
+                  className="search-bar"
+                  type="text"
+                  value={searchInput}
+                  onChange={handleSearchChange}
+                  onKeyDown={handleKeyDown}
+                />
+                <button className="search-button" onClick={handleSearchSubmit}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="30px"
+                    viewBox="0 -960 960 960"
+                    width="30px"
+                    fill="#ffffff"
+                    style={{
+                      display: "block",
+                      margin: 0,
+                      padding: 0,
+                      border: "none",
+                    }}
+                  >
+                    <path d="M792-120.67 532.67-380q-30 25.33-69.64 39.67Q423.39-326 378.67-326q-108.44 0-183.56-75.17Q120-476.33 120-583.33t75.17-182.17q75.16-75.17 182.5-75.17 107.33 0 182.16 75.17 74.84 75.17 74.84 182.27 0 43.23-14 82.9-14 39.66-40.67 73l260 258.66-48 48Zm-414-272q79.17 0 134.58-55.83Q568-504.33 568-583.33q0-79-55.42-134.84Q457.17-774 378-774q-79.72 0-135.53 55.83-55.8 55.84-55.8 134.84t55.8 134.83q55.81 55.83 135.53 55.83Z" />
+                  </svg>
+                </button>
+              </div>
+              <button
+                onClick={clearSearch}
+                className="search-button"
+                style={{
+                  backgroundColor: "#333",
+                  padding: "0px",
+                  margin: "-40px",
+                }}
+              >
+                <img
+                  src={CloseImage}
+                  alt="close-image"
                   width="30px"
-                  fill="#ffffff"
-                  style={{
-                    display: "block",
-                    margin: 0,
-                    padding: 0,
-                    border: "none",
-                  }}
-                >
-                  <path d="M792-120.67 532.67-380q-30 25.33-69.64 39.67Q423.39-326 378.67-326q-108.44 0-183.56-75.17Q120-476.33 120-583.33t75.17-182.17q75.16-75.17 182.5-75.17 107.33 0 182.16 75.17 74.84 75.17 74.84 182.27 0 43.23-14 82.9-14 39.66-40.67 73l260 258.66-48 48Zm-414-272q79.17 0 134.58-55.83Q568-504.33 568-583.33q0-79-55.42-134.84Q457.17-774 378-774q-79.72 0-135.53 55.83-55.8 55.84-55.8 134.84t55.8 134.83q55.81 55.83 135.53 55.83Z" />
-                </svg>
+                  height="30px"
+                />
               </button>
             </div>
           </div>
@@ -493,7 +519,7 @@ const JobList = () => {
               justifyContent: "center",
             }}
           >
-            <p>No saved jobs found</p>
+            <p>No jobs found</p>
           </div>
         )}
       </div>

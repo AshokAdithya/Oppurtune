@@ -32,13 +32,16 @@ const LoginPage = () => {
         password,
       });
       if (response.data.success) {
+        console.log("HHi");
         dispatch(login(response.data.username));
         localStorage.setItem("user", response.data.username);
         Navigate("/");
       } else {
+        console.log("hi");
         setErrorMessage("Invalid credentials");
       }
     } catch (error) {
+      console.log("Hi");
       setErrorMessage("Invalid credentials");
     }
   };

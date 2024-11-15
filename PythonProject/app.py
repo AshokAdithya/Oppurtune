@@ -26,14 +26,15 @@ def register():
     password = data.get('password')
 
     if len(password)<8:
-        return jsonify({'error': 'Password should be greater than 8 characters',"success":False}), 400
+        return jsonify({'message': 'Password should be greater than 8 characters',"success":False}), 200
 
     try:
         db.cursor.execute("INSERT INTO USERS (username, password) VALUES (:username, :password)",{'username': username, 'password': password})
         db.connection.commit()
+        
         return jsonify({'message': 'User registered successfully!',"success":True}), 201
     except cx_Oracle.IntegrityError:
-        return jsonify({'message': 'Username already exists!',"success":False}), 400
+        return jsonify({'message': 'Username already exists!',"success":False}), 200
 
 @app.route('/api/login', methods=['POST'])
 def login():
@@ -307,38 +308,47 @@ def save_job_details():
 @app.route("/api/saved-jobs/<string:username>",methods=["GET"])
 def get_saved_jobs(username):
     query="SELECT * FROM APPLICATIONS WHERE username = :username"
-    params={"username": username }
-
-    query2="SELECT post_id, company_name, company_logo, company_location, job_title FROM JOB_LIST WHERE post_id = :post_id"
+    query = """
+        SELECT 
+            JOB_LIST.post_id, 
+            JOB_LIST.company_name, 
+            JOB_LIST.company_logo, 
+            JOB_LIST.company_location, 
+            JOB_LIST.job_title, 
+            APPLICATIONS.saved_date 
+        FROM 
+            APPLICATIONS 
+        JOIN 
+            JOB_LIST 
+        ON 
+            APPLICATIONS.post_id = JOB_LIST.post_id 
+        WHERE 
+            APPLICATIONS.username = :username
+    """
+    params = {"username": username}
 
     try:
-        db.cursor.execute(query,params)
-        rows=db.cursor.fetchall()
+        # Execute the JOIN query
+        db.cursor.execute(query, params)
+        rows = db.cursor.fetchall()
 
-        jobs=[]
-
-        if len(rows)<=0:
-            return jsonify(jobs),200
-        
-        for row in rows:
-            db.cursor.execute(query2,{"post_id":row[1]})
-            result=db.cursor.fetchone()
-
-            job={
-                "post_id": result[0],
-                "company_name": result[1],
-                "company_logo": result[2],
-                "company_location": result[3],
-                "job_title": result[4],
-                "saved_date":row[2]
+        # Construct the jobs list
+        jobs = [
+            {
+                "post_id": row[0],
+                "company_name": row[1],
+                "company_logo": row[2],
+                "company_location": row[3],
+                "job_title": row[4],
+                "saved_date": row[5]
             }
-
-            jobs.append(job)
+            for row in rows
+        ]
         
-        return jsonify(jobs),200
+        return jsonify(jobs), 200
 
     except Exception as e:
-        return jsonify({'message': 'Error fetching jobs',"success":False}), 500
+        return jsonify({'message': 'Error fetching jobs', "success": False}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)

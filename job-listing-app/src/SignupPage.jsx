@@ -43,9 +43,11 @@ const SignupPage = () => {
       console.log(response.data);
       if (response.data.success) {
         Navigate("/login");
+      } else {
+        setErrorMessage(response.data.message);
       }
     } catch (error) {
-      setErrorMessage("Signup failed");
+      setErrorMessage(response.data.message);
     }
   };
 

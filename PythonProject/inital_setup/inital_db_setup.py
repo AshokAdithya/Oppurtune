@@ -16,20 +16,24 @@ cur = conn.cursor()
 # try:
 #     # Create the JOB_LIST table
 #     sql_create = """
-#     CREATE TABLE JOB_LIST(
-#         post_id NUMBER(10,0) PRIMARY KEY,
-#         company_name VARCHAR2(255) NOT NULL,
-#         company_logo VARCHAR2(1000),
-#         company_location VARCHAR2(255) NOT NULL,
-#         job_posted_date DATE NOT NULL,
-#         job_title VARCHAR2(255) NOT NULL,
-#         job_type VARCHAR2(15) NOT NULL,
-#         job_apply_url VARCHAR2(1000) NOT NULL,
-#         job_role VARCHAR2(100) NOT NULL,
-#         job_skills CLOB,
-#         created_at DATE,
-#         about_job VARCHAR(4000)
-#     )
+# CREATE TABLE JOB_LIST(
+#     post_id NUMBER(10,0) PRIMARY KEY,
+#     company_name VARCHAR2(255) NOT NULL,
+#     company_logo VARCHAR2(1000),
+#     company_location VARCHAR2(255) NOT NULL,
+#     job_posted_date DATE NOT NULL,
+#     job_title VARCHAR2(255) NOT NULL,
+#     job_type VARCHAR2(15) NOT NULL,
+#     job_apply_url VARCHAR2(1000) NOT NULL,
+#     job_role VARCHAR2(100) NOT NULL,
+#     job_skills CLOB,
+#     created_at DATE,
+#     about_job VARCHAR(4000)
+# )
+
+CREATE TABLE USERS (
+    
+)
 #     """
 
 #     cur.execute(sql_create)
